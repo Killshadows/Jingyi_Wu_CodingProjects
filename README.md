@@ -1,3 +1,4 @@
-# Jingyi_Wu_CodingProjects
-# Class assignment for Econ613: Applied Econometrics
-# Class assignment for Econ613: Financial Market Forecasting
+# Coding Projects of Jingyi Wu
+Class assignments at Duke
+- Econ613: Applied Econometrics 
+- Econ623: Financial Market Forecasting
