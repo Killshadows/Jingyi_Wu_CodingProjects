@@ -1,0 +1,1303 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/killshadows/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/5/Jingyi_Wu_Econ613_HW#5.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}16 Apr 2019, 21:21:29
+{txt}
+{com}. **===========================================================
+. **HW2
+. **===========================================================
+. clear
+{txt}
+{com}. 
+. **Exercise 1 
+. *generate data
+. set seed 100 
+{txt}
+{com}. set obs 10000
+{txt}{p}
+number of observations (_N)  was 0,
+now 10,000
+{p_end}
+
+{com}. gen x1 = runiform(1,3)
+{txt}
+{com}. gen x2 = rgamma(3,2)
+{txt}
+{com}. gen x3 = rbinomial(1,0.3)
+{txt}
+{com}. gen eps = rnormal(2,1)
+{txt}
+{com}. gen y = 0.5+1.2*x1-0.9*x2+0.1*x3+eps
+{txt}
+{com}. egen a = mean(y)
+{txt}
+{com}. gen ydum = y
+{txt}
+{com}. replace ydum = 1 if ydum > a
+{txt}(5,632 real changes made)
+
+{com}. replace ydum = 0 if y <= a
+{txt}(4,368 real changes made)
+
+{com}. 
+. **Exercise 2 
+. *calculate correlation
+. correlate y x1 
+{txt}(obs=10,000)
+
+             {c |}        y       x1
+{hline 13}{c +}{hline 18}
+           y {c |}{res}   1.0000
+          {txt}x1 {c |}{res}   0.1984   1.0000
+
+{txt}
+{com}. *OLS regression
+. regress y x1 x2 x3
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}    10,000
+{txt}{hline 13}{c +}{hline 34}   F(3, 9996)      = {res} 34299.54
+{txt}       Model {c |} {res} 102563.135         3  34187.7117   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 9963.40846     9,996  .996739542   {txt}R-squared       ={res}    0.9115
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.9114
+{txt}       Total {c |} {res} 112526.543     9,999  11.2537797   {txt}Root MSE        =   {res} .99837
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}           y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} 1.202823{col 26}{space 2} .0171948{col 37}{space 1}   69.95{col 46}{space 3}0.000{col 54}{space 4} 1.169118{col 67}{space 3} 1.236529
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-.9015529{col 26}{space 2} .0028733{col 37}{space 1} -313.77{col 46}{space 3}0.000{col 54}{space 4}-.9071851{col 67}{space 3}-.8959208
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2} .0492988{col 26}{space 2} .0217605{col 37}{space 1}    2.27{col 46}{space 3}0.024{col 54}{space 4} .0066438{col 67}{space 3} .0919538
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.522753{col 26}{space 2} .0402986{col 37}{space 1}   62.60{col 46}{space 3}0.000{col 54}{space 4}  2.44376{col 67}{space 3} 2.601746
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. *bootstrap
+. bootstrap, reps(49): regress y x1 x2 x3
+{txt}(running regress on estimation sample)
+{res}
+{txt}Bootstrap replications ({res}49{txt})
+{hline 4}{c +}{hline 3} 1 {hline 3}{c +}{hline 3} 2 {hline 3}{c +}{hline 3} 3 {hline 3}{c +}{hline 3} 4 {hline 3}{c +}{hline 3} 5 
+.................................................
+{res}
+{txt}Linear regression{col 49}Number of obs{col 67}= {res}    10,000
+{txt}{col 49}Replications{col 67}= {res}        49
+{txt}{col 49}Wald chi2({res}3{txt}){col 67}= {res}  86818.70
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.9115
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.9114
+{txt}{col 49}Root MSE{col 67}= {res}    0.9984
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}   Observed{col 26}   Bootstrap{col 54}         Norm{col 67}al-based
+{col 1}           y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} 1.202823{col 26}{space 2} .0168363{col 37}{space 1}   71.44{col 46}{space 3}0.000{col 54}{space 4} 1.169825{col 67}{space 3} 1.235822
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-.9015529{col 26}{space 2} .0031226{col 37}{space 1} -288.72{col 46}{space 3}0.000{col 54}{space 4}-.9076731{col 67}{space 3}-.8954327
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2} .0492988{col 26}{space 2} .0249356{col 37}{space 1}    1.98{col 46}{space 3}0.048{col 54}{space 4}  .000426{col 67}{space 3} .0981717
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.522753{col 26}{space 2} .0388285{col 37}{space 1}   64.97{col 46}{space 3}0.000{col 54}{space 4} 2.446651{col 67}{space 3} 2.598855
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. bootstrap, reps(499): regress y x1 x2 x3
+{txt}(running regress on estimation sample)
+{res}
+{txt}Bootstrap replications ({res}499{txt})
+{hline 4}{c +}{hline 3} 1 {hline 3}{c +}{hline 3} 2 {hline 3}{c +}{hline 3} 3 {hline 3}{c +}{hline 3} 4 {hline 3}{c +}{hline 3} 5 
+..................................................    50
+..................................................   100
+..................................................   150
+..................................................   200
+..................................................   250
+..................................................   300
+..................................................   350
+..................................................   400
+..................................................   450
+.................................................
+{res}
+{txt}Linear regression{col 49}Number of obs{col 67}= {res}    10,000
+{txt}{col 49}Replications{col 67}= {res}       499
+{txt}{col 49}Wald chi2({res}3{txt}){col 67}= {res} 100531.76
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}{col 49}R-squared{col 67}= {res}    0.9115
+{txt}{col 49}Adj R-squared{col 67}= {res}    0.9114
+{txt}{col 49}Root MSE{col 67}= {res}    0.9984
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}   Observed{col 26}   Bootstrap{col 54}         Norm{col 67}al-based
+{col 1}           y{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} 1.202823{col 26}{space 2} .0170046{col 37}{space 1}   70.73{col 46}{space 3}0.000{col 54}{space 4} 1.169495{col 67}{space 3} 1.236152
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-.9015529{col 26}{space 2} .0028584{col 37}{space 1} -315.41{col 46}{space 3}0.000{col 54}{space 4}-.9071553{col 67}{space 3}-.8959506
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2} .0492988{col 26}{space 2} .0220892{col 37}{space 1}    2.23{col 46}{space 3}0.026{col 54}{space 4} .0060047{col 67}{space 3} .0925929
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2.522753{col 26}{space 2} .0385021{col 37}{space 1}   65.52{col 46}{space 3}0.000{col 54}{space 4}  2.44729{col 67}{space 3} 2.598216
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. **Exercise 4 & 5
+. *probit model
+. probit ydum x1 x2 x3
+
+{res}{txt}Iteration 0:{space 3}log likelihood = {res:-6851.3729}  
+Iteration 1:{space 3}log likelihood = {res:-2218.8553}  
+Iteration 2:{space 3}log likelihood = {res: -2104.368}  
+Iteration 3:{space 3}log likelihood = {res:-2102.7901}  
+Iteration 4:{space 3}log likelihood = {res:-2102.7875}  
+Iteration 5:{space 3}log likelihood = {res:-2102.7875}  
+{res}
+{txt}Probit regression{col 49}Number of obs{col 67}= {res}    10,000
+{txt}{col 49}LR chi2({res}3{txt}){col 67}= {res}   9497.17
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-2102.7875{txt}{col 49}Pseudo R2{col 67}= {res}    0.6931
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}        ydum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} 1.163635{col 26}{space 2} .0441212{col 37}{space 1}   26.37{col 46}{space 3}0.000{col 54}{space 4}  1.07716{col 67}{space 3} 1.250111
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-.9199552{col 26}{space 2} .0189075{col 37}{space 1}  -48.66{col 46}{space 3}0.000{col 54}{space 4}-.9570133{col 67}{space 3}-.8828971
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2}-.0514779{col 26}{space 2} .0474789{col 37}{space 1}   -1.08{col 46}{space 3}0.278{col 54}{space 4}-.1445349{col 67}{space 3} .0415791
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 3.202179{col 26}{space 2} .1032825{col 37}{space 1}   31.00{col 46}{space 3}0.000{col 54}{space 4} 2.999749{col 67}{space 3} 3.404609
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: 551 failures and 8 successes completely determined.{p_end}
+
+{com}. *margin effect for probit model
+. margins, dydx(*) atmeans
+{res}
+{txt}Conditional marginal effects{col 49}Number of obs{col 67}= {res}    10,000
+{txt}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(ydum), predict()}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:x1 x2 x3}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:at}:{space 1}{res:{txt:x1}{space 14}{txt:=} {space 4}2.00771 {txt:(mean)}}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col: }{space 2}{res:{txt:x2}{space 14}{txt:=} {space 3}6.012179 {txt:(mean)}}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col: }{space 2}{res:{txt:x3}{space 14}{txt:=} {space 6}.3013 {txt:(mean)}}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26} Delta-method
+{col 14}{c |}      dy/dx{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} .4642085{col 26}{space 2} .0176004{col 37}{space 1}   26.37{col 46}{space 3}0.000{col 54}{space 4} .4297123{col 67}{space 3} .4987047
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-.3669972{col 26}{space 2} .0075313{col 37}{space 1}  -48.73{col 46}{space 3}0.000{col 54}{space 4}-.3817583{col 67}{space 3}-.3522362
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2}-.0205361{col 26}{space 2} .0189407{col 37}{space 1}   -1.08{col 46}{space 3}0.278{col 54}{space 4}-.0576592{col 67}{space 3} .0165871
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. *logit model
+. logit ydum x1 x2 x3
+
+{res}{txt}Iteration 0:{space 3}log likelihood = {res:-6851.3729}  
+Iteration 1:{space 3}log likelihood = {res:-2186.3999}  
+Iteration 2:{space 3}log likelihood = {res:-2127.6594}  
+Iteration 3:{space 3}log likelihood = {res:-2106.9983}  
+Iteration 4:{space 3}log likelihood = {res:-2106.9212}  
+Iteration 5:{space 3}log likelihood = {res:-2106.9212}  
+{res}
+{txt}Logistic regression{col 49}Number of obs{col 67}= {res}    10,000
+{txt}{col 49}LR chi2({res}3{txt}){col 67}= {res}   9488.90
+{txt}{col 49}Prob > chi2{col 67}= {res}    0.0000
+{txt}Log likelihood = {res}-2106.9212{txt}{col 49}Pseudo R2{col 67}= {res}    0.6925
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}        ydum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} 2.114757{col 26}{space 2} .0826597{col 37}{space 1}   25.58{col 46}{space 3}0.000{col 54}{space 4} 1.952746{col 67}{space 3} 2.276767
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-1.657532{col 26}{space 2} .0379001{col 37}{space 1}  -43.73{col 46}{space 3}0.000{col 54}{space 4}-1.731815{col 67}{space 3}-1.583249
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2}-.0915463{col 26}{space 2} .0856275{col 37}{space 1}   -1.07{col 46}{space 3}0.285{col 54}{space 4}-.2593731{col 67}{space 3} .0762805
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 5.736495{col 26}{space 2} .1939824{col 37}{space 1}   29.57{col 46}{space 3}0.000{col 54}{space 4} 5.356296{col 67}{space 3} 6.116693
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: 106 failures and 0 successes completely determined.{p_end}
+
+{com}. *margin effect for logit model
+. margins, dydx(*) atmeans
+{res}
+{txt}Conditional marginal effects{col 49}Number of obs{col 67}= {res}    10,000
+{txt}Model VCE{col 14}: {res}OIM
+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Pr(ydum), predict()}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:dy/dx w.r.t.}:{space 1}{res:x1 x2 x3}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:at}:{space 1}{res:{txt:x1}{space 14}{txt:=} {space 4}2.00771 {txt:(mean)}}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col: }{space 2}{res:{txt:x2}{space 14}{txt:=} {space 3}6.012179 {txt:(mean)}}{p_end}
+{p2colreset}{...}
+{txt}{p2colset 1 14 16 2}{...}
+{p2col: }{space 2}{res:{txt:x3}{space 14}{txt:=} {space 6}.3013 {txt:(mean)}}{p_end}
+{p2colreset}{...}
+
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26} Delta-method
+{col 14}{c |}      dy/dx{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 10}x1 {c |}{col 14}{res}{space 2} .5286741{col 26}{space 2} .0206636{col 37}{space 1}   25.58{col 46}{space 3}0.000{col 54}{space 4} .4881742{col 67}{space 3}  .569174
+{txt}{space 10}x2 {c |}{col 14}{res}{space 2}-.4143713{col 26}{space 2} .0094613{col 37}{space 1}  -43.80{col 46}{space 3}0.000{col 54}{space 4}-.4329152{col 67}{space 3}-.3958274
+{txt}{space 10}x3 {c |}{col 14}{res}{space 2}-.0228859{col 26}{space 2} .0214063{col 37}{space 1}   -1.07{col 46}{space 3}0.285{col 54}{space 4}-.0648414{col 67}{space 3} .0190696
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. **i don't know how to do bootstrap for marginal effect.....
+. 
+. **===========================================================
+. **HW3
+. **===========================================================
+. clear all
+{res}{txt}
+{com}. set more off, perm
+{txt}({cmd:set more} preference recorded)
+
+{com}. set scrollbufsize 2000000
+{txt}({cmd:set scrollbufsize} will take effect the next time you launch Stata)
+
+{com}. 
+. *Exercise 1
+. insheet using /Users/killshadows/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/3/product.csv
+{txt}(13 vars, 4,470 obs)
+
+{com}. sort hhid
+{txt}
+{com}. save data, replace
+{txt}file data.dta saved
+
+{com}. clear
+{txt}
+{com}. insheet using /Users/killshadows/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/3/demos.csv
+{txt}(9 vars, 516 obs)
+
+{com}. save datanew, replace
+{txt}file datanew.dta saved
+
+{com}. sort hhid
+{txt}
+{com}. merge hhid using data.dta
+{txt}{p}
+(note: you are using old
+{bf:merge} syntax; see
+{bf:{help merge:[D] merge}} for new syntax)
+{p_end}
+{p 0 4 2}
+variable{txt} hhid
+does not uniquely identify observations in
+data.dta
+{p_end}
+
+{com}. *average and dispersion in product characteristics
+. summarize ppk_stk pbb_stk pfl_stk phse_stk pgen_stk pimp_stk pss_tub ppk_tub pfl_tub phse_tub
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 5}ppk_stk {c |}{res}      4,470    .5184362    .1505174        .19        .67
+{txt}{space 5}pbb_stk {c |}{res}      4,470    .5432103    .1203319        .19       1.01
+{txt}{space 5}pfl_stk {c |}{res}      4,470     1.01502    .0428952        .95       1.16
+{txt}{space 4}phse_stk {c |}{res}      4,470    .4371476    .1188312        .19        .64
+{txt}{space 4}pgen_stk {c |}{res}      4,470    .3452819    .0351661        .25        .55
+{txt}{hline 13}{c +}{hline 57}
+{space 4}pimp_stk {c |}{res}      4,470    .7807785    .1146461        .33        2.3
+{txt}{space 5}pss_tub {c |}{res}      4,470    .8250895    .0612116         .5        .98
+{txt}{space 5}ppk_tub {c |}{res}      4,470    1.077409    .0297261        .98       1.24
+{txt}{space 5}pfl_tub {c |}{res}      4,470    1.189376    .0140545        .69       1.47
+{txt}{space 4}phse_tub {c |}{res}      4,470    .5686734     .072455        .33       1.27
+{txt}
+{com}. *market share
+. tabulate choice
+
+     {txt}choice {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}      1,766       39.51       39.51
+{txt}          2 {c |}{res}        699       15.64       55.15
+{txt}          3 {c |}{res}        243        5.44       60.58
+{txt}          4 {c |}{res}        593       13.27       73.85
+{txt}          5 {c |}{res}        315        7.05       80.89
+{txt}          6 {c |}{res}         74        1.66       82.55
+{txt}          7 {c |}{res}        319        7.14       89.69
+{txt}          8 {c |}{res}        203        4.54       94.23
+{txt}          9 {c |}{res}        225        5.03       99.26
+{txt}         10 {c |}{res}         33        0.74      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      4,470      100.00
+{txt}
+{com}. tabulate income choice
+
+           {txt}{c |}                              choice
+    Income {c |}         1          2          3          4          5          6 {c |}     Total
+{hline 11}{c +}{hline 66}{c +}{hline 10}
+       2.5 {c |}{res}        19          4          0          2          6          0 {txt}{c |}{res}        50 
+{txt}       7.5 {c |}{res}       117         54         13         34         19          2 {txt}{c |}{res}       295 
+{txt}      12.5 {c |}{res}       196        106         41         44         23          9 {txt}{c |}{res}       495 
+{txt}      17.5 {c |}{res}       318        100         27        111         21          5 {txt}{c |}{res}       677 
+{txt}      22.5 {c |}{res}       292        123         34        154        123          2 {txt}{c |}{res}       843 
+{txt}      27.5 {c |}{res}       195         94          9         67         18          6 {txt}{c |}{res}       476 
+{txt}      32.5 {c |}{res}       209         84         28         64         54          4 {txt}{c |}{res}       549 
+{txt}      37.5 {c |}{res}       132         34         17         29         23          1 {txt}{c |}{res}       279 
+{txt}      42.5 {c |}{res}       125         33         33         23          6         20 {txt}{c |}{res}       303 
+{txt}      47.5 {c |}{res}        83         22         23         16          7         17 {txt}{c |}{res}       188 
+{txt}        55 {c |}{res}        47         30         11         32          7          3 {txt}{c |}{res}       201 
+{txt}      67.5 {c |}{res}        19          4          1          8          6          2 {txt}{c |}{res}        51 
+{txt}      87.5 {c |}{res}         9         10          3          1          0          1 {txt}{c |}{res}        37 
+{txt}       130 {c |}{res}         5          1          3          8          2          2 {txt}{c |}{res}        26 
+{txt}{hline 11}{c +}{hline 66}{c +}{hline 10}
+     Total {c |}{res}     1,766        699        243        593        315         74 {txt}{c |}{res}     4,470 
+
+
+           {txt}{c |}                   choice
+    Income {c |}         7          8          9         10 {c |}     Total
+{hline 11}{c +}{hline 44}{c +}{hline 10}
+       2.5 {c |}{res}        16          1          2          0 {txt}{c |}{res}        50 
+{txt}       7.5 {c |}{res}        27          6         22          1 {txt}{c |}{res}       295 
+{txt}      12.5 {c |}{res}        40          8         25          3 {txt}{c |}{res}       495 
+{txt}      17.5 {c |}{res}        54         19         20          2 {txt}{c |}{res}       677 
+{txt}      22.5 {c |}{res}        41         36         30          8 {txt}{c |}{res}       843 
+{txt}      27.5 {c |}{res}        24         25         34          4 {txt}{c |}{res}       476 
+{txt}      32.5 {c |}{res}        49         19         33          5 {txt}{c |}{res}       549 
+{txt}      37.5 {c |}{res}        15         14          9          5 {txt}{c |}{res}       279 
+{txt}      42.5 {c |}{res}        27         21         14          1 {txt}{c |}{res}       303 
+{txt}      47.5 {c |}{res}         6          9          2          3 {txt}{c |}{res}       188 
+{txt}        55 {c |}{res}        12         42         17          0 {txt}{c |}{res}       201 
+{txt}      67.5 {c |}{res}         7          3          0          1 {txt}{c |}{res}        51 
+{txt}      87.5 {c |}{res}         1          0         12          0 {txt}{c |}{res}        37 
+{txt}       130 {c |}{res}         0          0          5          0 {txt}{c |}{res}        26 
+{txt}{hline 11}{c +}{hline 44}{c +}{hline 10}
+     Total {c |}{res}       319        203        225         33 {txt}{c |}{res}     4,470 
+{txt}
+{com}. 
+. **Exercise 2&3&4&5
+. clear
+{txt}
+{com}. *merge two datasets
+. insheet using /Users/killshadows/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/3/product.csv
+{txt}(13 vars, 4,470 obs)
+
+{com}. sort hhid
+{txt}
+{com}. save data, replace
+{txt}file data.dta saved
+
+{com}. clear
+{txt}
+{com}. insheet using /Users/killshadows/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/3/demos.csv
+{txt}(9 vars, 516 obs)
+
+{com}. save datanew, replace
+{txt}file datanew.dta saved
+
+{com}. sort hhid
+{txt}
+{com}. merge hhid using data.dta
+{txt}{p}
+(note: you are using old
+{bf:merge} syntax; see
+{bf:{help merge:[D] merge}} for new syntax)
+{p_end}
+{p 0 4 2}
+variable{txt} hhid
+does not uniquely identify observations in
+data.dta
+{p_end}
+
+{com}. 
+. *drop irrelavent data
+. drop fs3_4 fs5 fam_size college whtcollar retired hhid v1
+{txt}
+{com}. *generate unique id for conditional logit 
+. gen n = 4410
+{txt}
+{com}. gen v1 = _n
+{txt}
+{com}. *rename for later call
+. rename (ppk_stk pbb_stk pfl_stk phse_stk pgen_stk pimp_stk pss_tub ppk_tub pfl_tub phse_tub)(c1 c2 c3 c4 c5 c6 c7 c8 c9 c10)
+{res}{txt}
+{com}. *reshape data for conditional logit
+. reshape long c, i(v1) j(price)
+{txt}(note: j = 1 2 3 4 5 6 7 8 9 10)
+
+Data{col 36}wide{col 43}->{col 48}long
+{hline 77}
+Number of obs.                 {res}    4470   {txt}->{res}   44700
+{txt}Number of variables            {res}      15   {txt}->{res}       7
+{txt}j variable (10 values)                    ->   {res}price
+{txt}xij variables:
+                          {res}c1 c2 ... c10   {txt}->   {res}c
+{txt}{hline 77}
+
+{com}. *generate dummy variable for choice
+. gen dum = cond(price == choice, 1, 0)
+{txt}
+{com}. 
+. *do conditional logit model
+. asclogit dum c, case(v1) alternatives(price)
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-7559.2014}  
+Iteration 1:{space 3}log likelihood = {res:-7465.2594}  
+Iteration 2:{space 3}log likelihood = {res:-7464.9321}  
+Iteration 3:{space 3}log likelihood = {res:-7464.9321}  
+{res}
+{txt}Alternative-specific conditional logit{col 48}Number of obs{col 67}= {res}    44,700
+{txt}Case variable: v1{col 48}Number of cases{col 67}= {res}      4470
+
+{txt}Alternative variable: price{col 48}Alts per case: min = {res}        10
+{col 63}{txt}avg = {res}      10.0
+{col 63}{txt}max = {res}        10
+
+{txt}{col 51}Wald chi2({res}1{txt}){col 67}= {res}   1458.85
+{txt}Log likelihood = {res}-7464.9321{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}         dum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}price        {txt}{c |}
+{space 11}c {c |}{col 14}{res}{space 2}-6.656579{col 26}{space 2} .1742793{col 37}{space 1}  -38.19{col 46}{space 3}0.000{col 54}{space 4} -6.99816{col 67}{space 3}-6.314998
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-.9543068{col 26}{space 2} .0500462{col 37}{space 1}  -19.07{col 46}{space 3}0.000{col 54}{space 4}-1.052396{col 67}{space 3} -.856218
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.296968{col 26}{space 2} .1086515{col 37}{space 1}   11.94{col 46}{space 3}0.000{col 54}{space 4} 1.084015{col 67}{space 3} 1.509921
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.717332{col 26}{space 2} .0541582{col 37}{space 1}  -31.71{col 46}{space 3}0.000{col 54}{space 4} -1.82348{col 67}{space 3}-1.611184
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-2.904005{col 26}{space 2} .0714605{col 37}{space 1}  -40.64{col 46}{space 3}0.000{col 54}{space 4}-3.044065{col 67}{space 3}-2.763945
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}6            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-1.515311{col 26}{space 2} .1262303{col 37}{space 1}  -12.00{col 46}{space 3}0.000{col 54}{space 4}-1.762718{col 67}{space 3}-1.267904
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}7            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} .2517684{col 26}{space 2}  .079164{col 37}{space 1}    3.18{col 46}{space 3}0.001{col 54}{space 4} .0966098{col 67}{space 3}  .406927
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}8            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 1.464868{col 26}{space 2} .1180467{col 37}{space 1}   12.41{col 46}{space 3}0.000{col 54}{space 4} 1.233501{col 67}{space 3} 1.696236
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}9            {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2} 2.357505{col 26}{space 2}  .133774{col 37}{space 1}   17.62{col 46}{space 3}0.000{col 54}{space 4} 2.095313{col 67}{space 3} 2.619697
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}10           {txt}{c |}
+{space 7}_cons {c |}{col 14}{res}{space 2}-3.896594{col 26}{space 2}  .177419{col 37}{space 1}  -21.96{col 46}{space 3}0.000{col 54}{space 4}-4.244328{col 67}{space 3}-3.548859
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. *store estimation
+. est sto c_logit
+{txt}
+{com}. *calculate marginal effect
+. estat mfx
+{res}
+{txt}Pr(choice = 1|1 selected) ={col 10}{res} .41862592
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-1.62007}}}{space 1}{space 1}{ralign 8:{res:{sf: .045076}}}{space 1}{space 1}{ralign 6:{res:{sf:-35.94}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-1.70841}}}{space 1}{space 1}{ralign 8:{res:{sf:-1.53172}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .38092}}}{space 1}{space 1}{ralign 8:{res:{sf: .016377}}}{space 1}{space 1}{ralign 6:{res:{sf: 23.26}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .348821}}}{space 1}{space 1}{ralign 8:{res:{sf: .413019}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .156526}}}{space 1}{space 1}{ralign 8:{res:{sf: .010709}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.62}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .135537}}}{space 1}{space 1}{ralign 8:{res:{sf: .177515}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .359811}}}{space 1}{space 1}{ralign 8:{res:{sf: .016943}}}{space 1}{space 1}{ralign 6:{res:{sf: 21.24}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .326602}}}{space 1}{space 1}{ralign 8:{res:{sf: .393019}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .202435}}}{space 1}{space 1}{ralign 8:{res:{sf: .012376}}}{space 1}{space 1}{ralign 6:{res:{sf: 16.36}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .178178}}}{space 1}{space 1}{ralign 8:{res:{sf: .226691}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .04471}}}{space 1}{space 1}{ralign 8:{res:{sf: .005301}}}{space 1}{space 1}{ralign 6:{res:{sf:  8.43}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .034319}}}{space 1}{space 1}{ralign 8:{res:{sf:   .0551}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .194866}}}{space 1}{space 1}{ralign 8:{res:{sf: .011804}}}{space 1}{space 1}{ralign 6:{res:{sf: 16.51}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .171731}}}{space 1}{space 1}{ralign 8:{res:{sf: .218001}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .12222}}}{space 1}{space 1}{ralign 8:{res:{sf: .008972}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.62}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .104636}}}{space 1}{space 1}{ralign 8:{res:{sf: .139804}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .14162}}}{space 1}{space 1}{ralign 8:{res:{sf: .009996}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.17}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .122027}}}{space 1}{space 1}{ralign 8:{res:{sf: .161213}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .016959}}}{space 1}{space 1}{ralign 8:{res:{sf: .002973}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.71}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .011133}}}{space 1}{space 1}{ralign 8:{res:{sf: .022785}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 2|1 selected) ={col 10}{res} .13669617
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .38092}}}{space 1}{space 1}{ralign 8:{res:{sf: .016377}}}{space 1}{space 1}{ralign 6:{res:{sf: 23.26}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .348821}}}{space 1}{space 1}{ralign 8:{res:{sf: .413019}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.785545}}}{space 1}{space 1}{ralign 8:{res:{sf: .030158}}}{space 1}{space 1}{ralign 6:{res:{sf:-26.05}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.844654}}}{space 1}{space 1}{ralign 8:{res:{sf:-.726436}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .051111}}}{space 1}{space 1}{ralign 8:{res:{sf: .003765}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.57}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .043731}}}{space 1}{space 1}{ralign 8:{res:{sf: .058492}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .117491}}}{space 1}{space 1}{ralign 8:{res:{sf: .006448}}}{space 1}{space 1}{ralign 6:{res:{sf: 18.22}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .104853}}}{space 1}{space 1}{ralign 8:{res:{sf: .130129}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .066102}}}{space 1}{space 1}{ralign 8:{res:{sf: .004433}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.91}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .057414}}}{space 1}{space 1}{ralign 8:{res:{sf:  .07479}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .014599}}}{space 1}{space 1}{ralign 8:{res:{sf: .001779}}}{space 1}{space 1}{ralign 6:{res:{sf:  8.20}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .011112}}}{space 1}{space 1}{ralign 8:{res:{sf: .018087}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .063631}}}{space 1}{space 1}{ralign 8:{res:{sf: .004253}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.96}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .055295}}}{space 1}{space 1}{ralign 8:{res:{sf: .071966}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .039909}}}{space 1}{space 1}{ralign 8:{res:{sf: .003145}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.69}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .033744}}}{space 1}{space 1}{ralign 8:{res:{sf: .046074}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .046244}}}{space 1}{space 1}{ralign 8:{res:{sf: .003507}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.18}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:  .03937}}}{space 1}{space 1}{ralign 8:{res:{sf: .053118}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005538}}}{space 1}{space 1}{ralign 8:{res:{sf: .000986}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.62}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .003605}}}{space 1}{space 1}{ralign 8:{res:{sf: .007471}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 3|1 selected) ={col 10}{res} .05617075
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .156526}}}{space 1}{space 1}{ralign 8:{res:{sf: .010709}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.62}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .135537}}}{space 1}{space 1}{ralign 8:{res:{sf: .177515}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .051111}}}{space 1}{space 1}{ralign 8:{res:{sf: .003765}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.57}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .043731}}}{space 1}{space 1}{ralign 8:{res:{sf: .058492}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.352903}}}{space 1}{space 1}{ralign 8:{res:{sf:  .02284}}}{space 1}{space 1}{ralign 6:{res:{sf:-15.45}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.397668}}}{space 1}{space 1}{ralign 8:{res:{sf:-.308137}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .048279}}}{space 1}{space 1}{ralign 8:{res:{sf: .003651}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.22}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .041124}}}{space 1}{space 1}{ralign 8:{res:{sf: .055434}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .027162}}}{space 1}{space 1}{ralign 8:{res:{sf: .002319}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.71}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .022618}}}{space 1}{space 1}{ralign 8:{res:{sf: .031707}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005999}}}{space 1}{space 1}{ralign 8:{res:{sf: .000796}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.53}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .004438}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00756}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .026147}}}{space 1}{space 1}{ralign 8:{res:{sf: .002223}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.76}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:  .02179}}}{space 1}{space 1}{ralign 8:{res:{sf: .030504}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .016399}}}{space 1}{space 1}{ralign 8:{res:{sf: .001554}}}{space 1}{space 1}{ralign 6:{res:{sf: 10.56}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .013354}}}{space 1}{space 1}{ralign 8:{res:{sf: .019444}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .019002}}}{space 1}{space 1}{ralign 8:{res:{sf: .001757}}}{space 1}{space 1}{ralign 6:{res:{sf: 10.82}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .015559}}}{space 1}{space 1}{ralign 8:{res:{sf: .022445}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002276}}}{space 1}{space 1}{ralign 8:{res:{sf: .000422}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.40}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001449}}}{space 1}{space 1}{ralign 8:{res:{sf: .003102}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 4|1 selected) ={col 10}{res} .12912093
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .359811}}}{space 1}{space 1}{ralign 8:{res:{sf: .016943}}}{space 1}{space 1}{ralign 6:{res:{sf: 21.24}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .326602}}}{space 1}{space 1}{ralign 8:{res:{sf: .393019}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .117491}}}{space 1}{space 1}{ralign 8:{res:{sf: .006448}}}{space 1}{space 1}{ralign 6:{res:{sf: 18.22}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .104853}}}{space 1}{space 1}{ralign 8:{res:{sf: .130129}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .048279}}}{space 1}{space 1}{ralign 8:{res:{sf: .003651}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.22}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .041124}}}{space 1}{space 1}{ralign 8:{res:{sf: .055434}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.748524}}}{space 1}{space 1}{ralign 8:{res:{sf: .031316}}}{space 1}{space 1}{ralign 6:{res:{sf:-23.90}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.809901}}}{space 1}{space 1}{ralign 8:{res:{sf:-.687146}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .062439}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00431}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.49}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .053992}}}{space 1}{space 1}{ralign 8:{res:{sf: .070886}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .01379}}}{space 1}{space 1}{ralign 8:{res:{sf: .001698}}}{space 1}{space 1}{ralign 6:{res:{sf:  8.12}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .010462}}}{space 1}{space 1}{ralign 8:{res:{sf: .017118}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .060104}}}{space 1}{space 1}{ralign 8:{res:{sf: .004135}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.54}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:    .052}}}{space 1}{space 1}{ralign 8:{res:{sf: .068209}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .037698}}}{space 1}{space 1}{ralign 8:{res:{sf: .003025}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.46}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .031768}}}{space 1}{space 1}{ralign 8:{res:{sf: .043627}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .043681}}}{space 1}{space 1}{ralign 8:{res:{sf: .003386}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.90}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .037046}}}{space 1}{space 1}{ralign 8:{res:{sf: .050317}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005231}}}{space 1}{space 1}{ralign 8:{res:{sf: .000933}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.60}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .003402}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00706}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 5|1 selected) ={col 10}{res} .07264529
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .202435}}}{space 1}{space 1}{ralign 8:{res:{sf: .012376}}}{space 1}{space 1}{ralign 6:{res:{sf: 16.36}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .178178}}}{space 1}{space 1}{ralign 8:{res:{sf: .226691}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .066102}}}{space 1}{space 1}{ralign 8:{res:{sf: .004433}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.91}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .057414}}}{space 1}{space 1}{ralign 8:{res:{sf:  .07479}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .027162}}}{space 1}{space 1}{ralign 8:{res:{sf: .002319}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.71}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .022618}}}{space 1}{space 1}{ralign 8:{res:{sf: .031707}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .062439}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00431}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.49}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .053992}}}{space 1}{space 1}{ralign 8:{res:{sf: .070886}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: -.44844}}}{space 1}{space 1}{ralign 8:{res:{sf: .025561}}}{space 1}{space 1}{ralign 6:{res:{sf:-17.54}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.498539}}}{space 1}{space 1}{ralign 8:{res:{sf:-.398341}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .007759}}}{space 1}{space 1}{ralign 8:{res:{sf: .001001}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.75}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .005796}}}{space 1}{space 1}{ralign 8:{res:{sf: .009721}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .033816}}}{space 1}{space 1}{ralign 8:{res:{sf: .002681}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.61}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .028561}}}{space 1}{space 1}{ralign 8:{res:{sf: .039071}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .021209}}}{space 1}{space 1}{ralign 8:{res:{sf:   .0019}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.16}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .017485}}}{space 1}{space 1}{ralign 8:{res:{sf: .024933}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .024576}}}{space 1}{space 1}{ralign 8:{res:{sf: .002144}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.46}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .020374}}}{space 1}{space 1}{ralign 8:{res:{sf: .028778}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002943}}}{space 1}{space 1}{ralign 8:{res:{sf: .000538}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001888}}}{space 1}{space 1}{ralign 8:{res:{sf: .003998}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 6|1 selected) ={col 10}{res} .01604447
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .04471}}}{space 1}{space 1}{ralign 8:{res:{sf: .005301}}}{space 1}{space 1}{ralign 6:{res:{sf:  8.43}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .034319}}}{space 1}{space 1}{ralign 8:{res:{sf:   .0551}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .014599}}}{space 1}{space 1}{ralign 8:{res:{sf: .001779}}}{space 1}{space 1}{ralign 6:{res:{sf:  8.20}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .011112}}}{space 1}{space 1}{ralign 8:{res:{sf: .018087}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005999}}}{space 1}{space 1}{ralign 8:{res:{sf: .000796}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.53}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .004438}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00756}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .01379}}}{space 1}{space 1}{ralign 8:{res:{sf: .001698}}}{space 1}{space 1}{ralign 6:{res:{sf:  8.12}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .010462}}}{space 1}{space 1}{ralign 8:{res:{sf: .017118}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .007759}}}{space 1}{space 1}{ralign 8:{res:{sf: .001001}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.75}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .005796}}}{space 1}{space 1}{ralign 8:{res:{sf: .009721}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.105088}}}{space 1}{space 1}{ralign 8:{res:{sf: .012245}}}{space 1}{space 1}{ralign 6:{res:{sf: -8.58}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.129087}}}{space 1}{space 1}{ralign 8:{res:{sf:-.081089}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .007469}}}{space 1}{space 1}{ralign 8:{res:{sf: .000963}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.76}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .005582}}}{space 1}{space 1}{ralign 8:{res:{sf: .009355}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .004684}}}{space 1}{space 1}{ralign 8:{res:{sf: .000634}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.39}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .003441}}}{space 1}{space 1}{ralign 8:{res:{sf: .005927}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005428}}}{space 1}{space 1}{ralign 8:{res:{sf: .000726}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .004005}}}{space 1}{space 1}{ralign 8:{res:{sf: .006851}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .00065}}}{space 1}{space 1}{ralign 8:{res:{sf: .000136}}}{space 1}{space 1}{ralign 6:{res:{sf:  4.78}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .000384}}}{space 1}{space 1}{ralign 8:{res:{sf: .000916}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 7|1 selected) ={col 10}{res} .06992927
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .194866}}}{space 1}{space 1}{ralign 8:{res:{sf: .011804}}}{space 1}{space 1}{ralign 6:{res:{sf: 16.51}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .171731}}}{space 1}{space 1}{ralign 8:{res:{sf: .218001}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .063631}}}{space 1}{space 1}{ralign 8:{res:{sf: .004253}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.96}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .055295}}}{space 1}{space 1}{ralign 8:{res:{sf: .071966}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .026147}}}{space 1}{space 1}{ralign 8:{res:{sf: .002223}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.76}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:  .02179}}}{space 1}{space 1}{ralign 8:{res:{sf: .030504}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .060104}}}{space 1}{space 1}{ralign 8:{res:{sf: .004135}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.54}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:    .052}}}{space 1}{space 1}{ralign 8:{res:{sf: .068209}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .033816}}}{space 1}{space 1}{ralign 8:{res:{sf: .002681}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.61}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .028561}}}{space 1}{space 1}{ralign 8:{res:{sf: .039071}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .007469}}}{space 1}{space 1}{ralign 8:{res:{sf: .000963}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.76}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .005582}}}{space 1}{space 1}{ralign 8:{res:{sf: .009355}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.432938}}}{space 1}{space 1}{ralign 8:{res:{sf: .024519}}}{space 1}{space 1}{ralign 6:{res:{sf:-17.66}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.480995}}}{space 1}{space 1}{ralign 8:{res:{sf:-.384882}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .020416}}}{space 1}{space 1}{ralign 8:{res:{sf: .001828}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.17}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .016833}}}{space 1}{space 1}{ralign 8:{res:{sf: .023999}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .023657}}}{space 1}{space 1}{ralign 8:{res:{sf: .002057}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.50}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .019625}}}{space 1}{space 1}{ralign 8:{res:{sf: .027689}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002833}}}{space 1}{space 1}{ralign 8:{res:{sf: .000518}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001817}}}{space 1}{space 1}{ralign 8:{res:{sf: .003849}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 8|1 selected) ={col 10}{res} .04385975
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .12222}}}{space 1}{space 1}{ralign 8:{res:{sf: .008972}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.62}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .104636}}}{space 1}{space 1}{ralign 8:{res:{sf: .139804}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .039909}}}{space 1}{space 1}{ralign 8:{res:{sf: .003145}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.69}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .033744}}}{space 1}{space 1}{ralign 8:{res:{sf: .046074}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .016399}}}{space 1}{space 1}{ralign 8:{res:{sf: .001554}}}{space 1}{space 1}{ralign 6:{res:{sf: 10.56}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .013354}}}{space 1}{space 1}{ralign 8:{res:{sf: .019444}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .037698}}}{space 1}{space 1}{ralign 8:{res:{sf: .003025}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.46}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .031768}}}{space 1}{space 1}{ralign 8:{res:{sf: .043627}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .021209}}}{space 1}{space 1}{ralign 8:{res:{sf:   .0019}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.16}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .017485}}}{space 1}{space 1}{ralign 8:{res:{sf: .024933}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .004684}}}{space 1}{space 1}{ralign 8:{res:{sf: .000634}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.39}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .003441}}}{space 1}{space 1}{ralign 8:{res:{sf: .005927}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .020416}}}{space 1}{space 1}{ralign 8:{res:{sf: .001828}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.17}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .016833}}}{space 1}{space 1}{ralign 8:{res:{sf: .023999}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.279151}}}{space 1}{space 1}{ralign 8:{res:{sf: .019602}}}{space 1}{space 1}{ralign 6:{res:{sf:-14.24}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: -.31757}}}{space 1}{space 1}{ralign 8:{res:{sf:-.240731}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .014838}}}{space 1}{space 1}{ralign 8:{res:{sf: .001434}}}{space 1}{space 1}{ralign 6:{res:{sf: 10.35}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .012027}}}{space 1}{space 1}{ralign 8:{res:{sf: .017649}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .001777}}}{space 1}{space 1}{ralign 8:{res:{sf: .000334}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.33}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001123}}}{space 1}{space 1}{ralign 8:{res:{sf: .002431}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 9|1 selected) ={col 10}{res} .05082152
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .14162}}}{space 1}{space 1}{ralign 8:{res:{sf: .009996}}}{space 1}{space 1}{ralign 6:{res:{sf: 14.17}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .122027}}}{space 1}{space 1}{ralign 8:{res:{sf: .161213}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .046244}}}{space 1}{space 1}{ralign 8:{res:{sf: .003507}}}{space 1}{space 1}{ralign 6:{res:{sf: 13.18}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:  .03937}}}{space 1}{space 1}{ralign 8:{res:{sf: .053118}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .019002}}}{space 1}{space 1}{ralign 8:{res:{sf: .001757}}}{space 1}{space 1}{ralign 6:{res:{sf: 10.82}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .015559}}}{space 1}{space 1}{ralign 8:{res:{sf: .022445}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .043681}}}{space 1}{space 1}{ralign 8:{res:{sf: .003386}}}{space 1}{space 1}{ralign 6:{res:{sf: 12.90}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .037046}}}{space 1}{space 1}{ralign 8:{res:{sf: .050317}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .024576}}}{space 1}{space 1}{ralign 8:{res:{sf: .002144}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.46}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .020374}}}{space 1}{space 1}{ralign 8:{res:{sf: .028778}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005428}}}{space 1}{space 1}{ralign 8:{res:{sf: .000726}}}{space 1}{space 1}{ralign 6:{res:{sf:  7.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .004005}}}{space 1}{space 1}{ralign 8:{res:{sf: .006851}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .023657}}}{space 1}{space 1}{ralign 8:{res:{sf: .002057}}}{space 1}{space 1}{ralign 6:{res:{sf: 11.50}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .019625}}}{space 1}{space 1}{ralign 8:{res:{sf: .027689}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .014838}}}{space 1}{space 1}{ralign 8:{res:{sf: .001434}}}{space 1}{space 1}{ralign 6:{res:{sf: 10.35}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .012027}}}{space 1}{space 1}{ralign 8:{res:{sf: .017649}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.321105}}}{space 1}{space 1}{ralign 8:{res:{sf: .021545}}}{space 1}{space 1}{ralign 6:{res:{sf:-14.90}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.363332}}}{space 1}{space 1}{ralign 8:{res:{sf:-.278878}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002059}}}{space 1}{space 1}{ralign 8:{res:{sf: .000384}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.36}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001306}}}{space 1}{space 1}{ralign 8:{res:{sf: .002811}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 10|1 selected) ={col 10}{res} .00608591
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:c}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:1}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .016959}}}{space 1}{space 1}{ralign 8:{res:{sf: .002973}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.71}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .011133}}}{space 1}{space 1}{ralign 8:{res:{sf: .022785}}}{space 1}{space 1}{ralign 8:{res:{sf:  .51844}}}{space 0}
+{space 0}{space 0}{ralign 12:2}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005538}}}{space 1}{space 1}{ralign 8:{res:{sf: .000986}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.62}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .003605}}}{space 1}{space 1}{ralign 8:{res:{sf: .007471}}}{space 1}{space 1}{ralign 8:{res:{sf:  .54321}}}{space 0}
+{space 0}{space 0}{ralign 12:3}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002276}}}{space 1}{space 1}{ralign 8:{res:{sf: .000422}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.40}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001449}}}{space 1}{space 1}{ralign 8:{res:{sf: .003102}}}{space 1}{space 1}{ralign 8:{res:{sf:   1.015}}}{space 0}
+{space 0}{space 0}{ralign 12:4}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .005231}}}{space 1}{space 1}{ralign 8:{res:{sf: .000933}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.60}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .003402}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00706}}}{space 1}{space 1}{ralign 8:{res:{sf:  .43715}}}{space 0}
+{space 0}{space 0}{ralign 12:5}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002943}}}{space 1}{space 1}{ralign 8:{res:{sf: .000538}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001888}}}{space 1}{space 1}{ralign 8:{res:{sf: .003998}}}{space 1}{space 1}{ralign 8:{res:{sf:  .34528}}}{space 0}
+{space 0}{space 0}{ralign 12:6}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .00065}}}{space 1}{space 1}{ralign 8:{res:{sf: .000136}}}{space 1}{space 1}{ralign 6:{res:{sf:  4.78}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .000384}}}{space 1}{space 1}{ralign 8:{res:{sf: .000916}}}{space 1}{space 1}{ralign 8:{res:{sf:  .78078}}}{space 0}
+{space 0}{space 0}{ralign 12:7}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002833}}}{space 1}{space 1}{ralign 8:{res:{sf: .000518}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001817}}}{space 1}{space 1}{ralign 8:{res:{sf: .003849}}}{space 1}{space 1}{ralign 8:{res:{sf:  .82509}}}{space 0}
+{space 0}{space 0}{ralign 12:8}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .001777}}}{space 1}{space 1}{ralign 8:{res:{sf: .000334}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.33}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001123}}}{space 1}{space 1}{ralign 8:{res:{sf: .002431}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.0774}}}{space 0}
+{space 0}{space 0}{ralign 12:9}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .002059}}}{space 1}{space 1}{ralign 8:{res:{sf: .000384}}}{space 1}{space 1}{ralign 6:{res:{sf:  5.36}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .001306}}}{space 1}{space 1}{ralign 8:{res:{sf: .002811}}}{space 1}{space 1}{ralign 8:{res:{sf:  1.1894}}}{space 0}
+{space 0}{space 0}{ralign 12:10}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.040265}}}{space 1}{space 1}{ralign 8:{res:{sf: .007011}}}{space 1}{space 1}{ralign 6:{res:{sf: -5.74}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf:-.054006}}}{space 1}{space 1}{ralign 8:{res:{sf:-.026523}}}{space 1}{space 1}{ralign 8:{res:{sf:  .56867}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+{com}. 
+. *do multinomial logit model
+. asclogit dum, case(v1) alternatives(price) casevar(income)
+{res}
+{txt}Iteration 0:{space 3}log likelihood = {res:-8328.1129}  
+Iteration 1:{space 3}log likelihood = {res:-8236.9407}  
+Iteration 2:{space 3}log likelihood = {res: -8236.757}  
+Iteration 3:{space 3}log likelihood = {res: -8236.757}  
+{res}
+{txt}Alternative-specific conditional logit{col 48}Number of obs{col 67}= {res}    44,700
+{txt}Case variable: v1{col 48}Number of cases{col 67}= {res}      4470
+
+{txt}Alternative variable: price{col 48}Alts per case: min = {res}        10
+{col 63}{txt}avg = {res}      10.0
+{col 63}{txt}max = {res}        10
+
+{txt}{col 51}Wald chi2({res}9{txt}){col 67}= {res}    101.55
+{txt}Log likelihood = {res} -8236.757{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}         dum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0030887{col 26}{space 2}  .003114{col 37}{space 1}   -0.99{col 46}{space 3}0.321{col 54}{space 4} -.009192{col 67}{space 3} .0030145
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.8453241{col 26}{space 2} .0931354{col 37}{space 1}   -9.08{col 46}{space 3}0.000{col 54}{space 4}-1.027866{col 67}{space 3} -.662782
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0145862{col 26}{space 2} .0038255{col 37}{space 1}    3.81{col 46}{space 3}0.000{col 54}{space 4} .0070885{col 67}{space 3}  .022084
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.399858{col 26}{space 2} .1335802{col 37}{space 1}  -17.97{col 46}{space 3}0.000{col 54}{space 4} -2.66167{col 67}{space 3}-2.138045
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0040504{col 26}{space 2} .0030926{col 37}{space 1}    1.31{col 46}{space 3}0.190{col 54}{space 4}-.0020109{col 67}{space 3} .0101118
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.201326{col 26}{space 2} .0971021{col 37}{space 1}  -12.37{col 46}{space 3}0.000{col 54}{space 4}-1.391643{col 67}{space 3} -1.01101
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0012536{col 26}{space 2} .0042024{col 37}{space 1}   -0.30{col 46}{space 3}0.765{col 54}{space 4}-.0094901{col 67}{space 3} .0069829
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.690582{col 26}{space 2} .1269952{col 37}{space 1}  -13.31{col 46}{space 3}0.000{col 54}{space 4}-1.939488{col 67}{space 3}-1.441676
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}6            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}  .030612{col 26}{space 2}  .004674{col 37}{space 1}    6.55{col 46}{space 3}0.000{col 54}{space 4} .0214512{col 67}{space 3} .0397729
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-4.139767{col 26}{space 2}  .210989{col 37}{space 1}  -19.62{col 46}{space 3}0.000{col 54}{space 4}-4.553298{col 67}{space 3}-3.726236
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}7            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0069326{col 26}{space 2} .0044161{col 37}{space 1}   -1.57{col 46}{space 3}0.116{col 54}{space 4} -.015588{col 67}{space 3} .0017228
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-1.531042{col 26}{space 2} .1280434{col 37}{space 1}  -11.96{col 46}{space 3}0.000{col 54}{space 4}-1.782002{col 67}{space 3}-1.280081
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}8            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0228862{col 26}{space 2} .0036217{col 37}{space 1}    6.32{col 46}{space 3}0.000{col 54}{space 4} .0157878{col 67}{space 3} .0299845
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.848352{col 26}{space 2} .1393848{col 37}{space 1}  -20.44{col 46}{space 3}0.000{col 54}{space 4}-3.121541{col 67}{space 3}-2.575163
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}9            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}  .017743{col 26}{space 2} .0037623{col 37}{space 1}    4.72{col 46}{space 3}0.000{col 54}{space 4}  .010369{col 67}{space 3} .0251169
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.575597{col 26}{space 2}   .13614{col 37}{space 1}  -18.92{col 46}{space 3}0.000{col 54}{space 4}-2.842427{col 67}{space 3}-2.308768
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}10           {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0107909{col 26}{space 2}   .01013{col 37}{space 1}    1.07{col 46}{space 3}0.287{col 54}{space 4}-.0090636{col 67}{space 3} .0306454
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} -4.28227{col 26}{space 2}  .345792{col 37}{space 1}  -12.38{col 46}{space 3}0.000{col 54}{space 4} -4.96001{col 67}{space 3} -3.60453
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. *store estimation
+. est sto m_logit
+{txt}
+{com}. *calculate marginal effect
+. estat mfx
+{res}
+{txt}Pr(choice = 1|1 selected) ={col 10}{res} .39801715
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.001062}}}{space 1}{space 1}{ralign 8:{res:{sf: .000487}}}{space 1}{space 1}{ralign 6:{res:{sf: -2.18}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.029}}}{space 1}{space 1}{ralign 8:{res:{sf:-.002016}}}{space 1}{space 1}{ralign 8:{res:{sf:-.000108}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 2|1 selected) ={col 10}{res} .15691817
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.000904}}}{space 1}{space 1}{ralign 8:{res:{sf: .000378}}}{space 1}{space 1}{ralign 6:{res:{sf: -2.39}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.017}}}{space 1}{space 1}{ralign 8:{res:{sf:-.001645}}}{space 1}{space 1}{ralign 8:{res:{sf:-.000162}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 3|1 selected) ={col 10}{res} .05406295
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .000644}}}{space 1}{space 1}{ralign 8:{res:{sf: .000183}}}{space 1}{space 1}{ralign 6:{res:{sf:  3.53}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .000286}}}{space 1}{space 1}{ralign 8:{res:{sf: .001002}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 4|1 selected) ={col 10}{res} .13391688
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .000185}}}{space 1}{space 1}{ralign 8:{res:{sf: .000329}}}{space 1}{space 1}{ralign 6:{res:{sf:  0.56}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.574}}}{space 1}{space 1}{ralign 8:{res:{sf: -.00046}}}{space 1}{space 1}{ralign 8:{res:{sf:  .00083}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 5|1 selected) ={col 10}{res} .07089742
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.000278}}}{space 1}{space 1}{ralign 8:{res:{sf: .000264}}}{space 1}{space 1}{ralign 6:{res:{sf: -1.06}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.291}}}{space 1}{space 1}{ralign 8:{res:{sf:-.000795}}}{space 1}{space 1}{ralign 8:{res:{sf: .000238}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 6|1 selected) ={col 10}{res} .01478443
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .000413}}}{space 1}{space 1}{ralign 8:{res:{sf: .000066}}}{space 1}{space 1}{ralign 6:{res:{sf:  6.22}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .000283}}}{space 1}{space 1}{ralign 8:{res:{sf: .000543}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 7|1 selected) ={col 10}{res} .07107045
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf:-.000682}}}{space 1}{space 1}{ralign 8:{res:{sf: .000277}}}{space 1}{space 1}{ralign 6:{res:{sf: -2.47}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.014}}}{space 1}{space 1}{ralign 8:{res:{sf:-.001224}}}{space 1}{space 1}{ralign 8:{res:{sf: -.00014}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 8|1 selected) ={col 10}{res} .04343487
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .000878}}}{space 1}{space 1}{ralign 8:{res:{sf: .000138}}}{space 1}{space 1}{ralign 6:{res:{sf:  6.38}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .000608}}}{space 1}{space 1}{ralign 8:{res:{sf: .001148}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 9|1 selected) ={col 10}{res} .04948833
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf: .000746}}}{space 1}{space 1}{ralign 8:{res:{sf: .000164}}}{space 1}{space 1}{ralign 6:{res:{sf:  4.55}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.000}}}{space 1}{space 1}{ralign 8:{res:{sf: .000425}}}{space 1}{space 1}{ralign 8:{res:{sf: .001067}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+Pr(choice = 10|1 selected) ={col 10}{res} .00740936
+{txt}{hline 13}{c TT}{hline 65}
+variable     {c |}{col 18}dp/dx{col 26}Std. Err.{col 39}z{col 45}P>|z|{col 52}[    95% C.I.    ]{col 77}X
+{hline 13}{c +}{hline 65}
+{res}{txt}{space 0}{res:{lalign 13:casevars}}{c |}{space 10}{space 10}{space 8}{space 8}{space 10}{space 10}{space 9}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 8:{res:{sf:  .00006}}}{space 1}{space 1}{ralign 8:{res:{sf: .000074}}}{space 1}{space 1}{ralign 6:{res:{sf:  0.82}}}{space 1}{space 1}{ralign 6:{res:{sf: 0.413}}}{space 1}{space 1}{ralign 8:{res:{sf:-.000084}}}{space 1}{space 1}{ralign 8:{res:{sf: .000204}}}{space 1}{space 1}{ralign 8:{res:{sf:  27.664}}}{space 0}
+{hline 13}{c BT}{hline 65}
+
+{com}. 
+. *do mix logit model
+. asmixlogit dum, random(c) casevar(income) alternatives(price) case(v1)
+{res}
+{txt}Fitting fixed parameter model:
+{res}
+{txt}Fitting full model:
+{res}
+{txt}Iteration 0:{space 3}log simulated likelihood = {res:-7416.2546}  (not concave)
+Iteration 1:{space 3}log simulated likelihood = {res:-7398.1945}  
+Iteration 2:{space 3}log simulated likelihood = {res:-7355.6322}  
+Iteration 3:{space 3}log simulated likelihood = {res:-7352.5988}  
+Iteration 4:{space 3}log simulated likelihood = {res:-7352.5814}  
+Iteration 5:{space 3}log simulated likelihood = {res:-7352.5814}  
+{res}
+{txt}Alternative-specific mixed logit{col 48}Number of obs{col 67}= {res}    44,700
+{txt}Case variable: {res}v1{txt}{col 48}Number of cases{col 67}= {res}     4,470
+
+{txt}Alternative variable: {res}price{txt}{col 48}Alts per case: min = {res}        10
+{col 63}{txt}avg = {res}      10.0
+{col 63}{txt}max = {res}        10
+{txt}Integration sequence:      {res}Hammersley
+{txt}Integration points:   {res}             50{txt}{col 51}Wald chi2({res}10{txt}){col 67}= {res}   1211.55
+{txt}Log simulated likelihood = {res}-7352.5814{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}         dum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}price        {txt}{c |}
+{space 11}c {c |}{col 14}{res}{space 2}-7.547198{col 26}{space 2} .2223547{col 37}{space 1}  -33.94{col 46}{space 3}0.000{col 54}{space 4}-7.983005{col 67}{space 3}-7.111391
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Normal       {txt}{c |}
+{space 8}sd(c){c |}{col 14}{res}{space 2} 3.649194{col 26}{space 2}  .291882{col 54}{space 4} 3.119703{col 67}{space 3} 4.268552
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0058937{col 26}{space 2} .0036744{col 37}{space 1}   -1.60{col 46}{space 3}0.109{col 54}{space 4}-.0130955{col 67}{space 3}  .001308
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.8886583{col 26}{space 2} .1104599{col 37}{space 1}   -8.05{col 46}{space 3}0.000{col 54}{space 4}-1.105156{col 67}{space 3}-.6721609
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0202033{col 26}{space 2} .0046021{col 37}{space 1}    4.39{col 46}{space 3}0.000{col 54}{space 4} .0111834{col 67}{space 3} .0292232
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .3624811{col 26}{space 2} .2026931{col 37}{space 1}    1.79{col 46}{space 3}0.074{col 54}{space 4}-.0347902{col 67}{space 3} .7597523
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0025691{col 26}{space 2} .0034659{col 37}{space 1}    0.74{col 46}{space 3}0.459{col 54}{space 4} -.004224{col 67}{space 3} .0093622
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.025266{col 26}{space 2} .1126402{col 37}{space 1}  -17.98{col 46}{space 3}0.000{col 54}{space 4}-2.246037{col 67}{space 3}-1.804495
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} -.003862{col 26}{space 2} .0045853{col 37}{space 1}   -0.84{col 46}{space 3}0.400{col 54}{space 4} -.012849{col 67}{space 3}  .005125
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-3.383501{col 26}{space 2} .1540533{col 37}{space 1}  -21.96{col 46}{space 3}0.000{col 54}{space 4} -3.68544{col 67}{space 3}-3.081562
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}6            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0324638{col 26}{space 2} .0049366{col 37}{space 1}    6.58{col 46}{space 3}0.000{col 54}{space 4} .0227883{col 67}{space 3} .0421394
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.521205{col 26}{space 2} .2228586{col 37}{space 1}  -11.31{col 46}{space 3}0.000{col 54}{space 4}   -2.958{col 67}{space 3} -2.08441
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}7            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0061804{col 26}{space 2} .0047636{col 37}{space 1}   -1.30{col 46}{space 3}0.194{col 54}{space 4}-.0155168{col 67}{space 3}  .003156
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4032682{col 26}{space 2} .1520697{col 37}{space 1}    2.65{col 46}{space 3}0.008{col 54}{space 4}  .105217{col 67}{space 3} .7013193
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}8            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0292799{col 26}{space 2}  .004687{col 37}{space 1}    6.25{col 46}{space 3}0.000{col 54}{space 4} .0200936{col 67}{space 3} .0384662
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0961353{col 26}{space 2} .2292829{col 37}{space 1}    0.42{col 46}{space 3}0.675{col 54}{space 4} -.353251{col 67}{space 3} .5455217
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}9            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0258758{col 26}{space 2} .0051442{col 37}{space 1}    5.03{col 46}{space 3}0.000{col 54}{space 4} .0157934{col 67}{space 3} .0359583
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .7081915{col 26}{space 2} .2768591{col 37}{space 1}    2.56{col 46}{space 3}0.011{col 54}{space 4} .1655576{col 67}{space 3} 1.250825
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}10           {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0065357{col 26}{space 2}  .010873{col 37}{space 1}    0.60{col 46}{space 3}0.548{col 54}{space 4}-.0147751{col 67}{space 3} .0278465
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-4.412742{col 26}{space 2} .3674048{col 37}{space 1}  -12.01{col 46}{space 3}0.000{col 54}{space 4}-5.132842{col 67}{space 3}-3.692641
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+LR test vs. fixed parameters: {help j_chibar##|_new:chibar2(01) =} {res}  130.70{txt}{col 55}Prob >= chibar2 = {res}{col 73}0.0000
+{txt}
+{com}. *store estimation (of all alternative)
+. est sto all
+{txt}
+{com}. 
+. *randomly drop one alternative (in this case drop the last alternative)
+. drop if choice == 10
+{txt}(330 observations deleted)
+
+{com}. drop if price == 10
+{txt}(4,437 observations deleted)
+
+{com}. 
+. *do mix logit model after removing one alternative
+. asmixlogit dum, random(c) casevar(income) alternatives(price) case(v1)
+{res}
+{txt}Fitting fixed parameter model:
+{res}
+{txt}Fitting full model:
+{res}
+{txt}Iteration 0:{space 3}log simulated likelihood = {res:-7238.4991}  (not concave)
+Iteration 1:{space 3}log simulated likelihood = {res:-7218.2886}  
+Iteration 2:{space 3}log simulated likelihood = {res:-7173.5145}  
+Iteration 3:{space 3}log simulated likelihood = {res:-7171.0366}  
+Iteration 4:{space 3}log simulated likelihood = {res:-7171.0302}  
+Iteration 5:{space 3}log simulated likelihood = {res:-7171.0302}  
+{res}
+{txt}Alternative-specific mixed logit{col 48}Number of obs{col 67}= {res}    39,933
+{txt}Case variable: {res}v1{txt}{col 48}Number of cases{col 67}= {res}     4,437
+
+{txt}Alternative variable: {res}price{txt}{col 48}Alts per case: min = {res}         9
+{col 63}{txt}avg = {res}       9.0
+{col 63}{txt}max = {res}         9
+{txt}Integration sequence:      {res}Hammersley
+{txt}Integration points:   {res}             50{txt}{col 51}Wald chi2({res}9{txt}){col 67}= {res}   1146.94
+{txt}Log simulated likelihood = {res}-7171.0302{col 51}{txt}Prob > chi2{col 67}= {res}    0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}         dum{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}price        {txt}{c |}
+{space 11}c {c |}{col 14}{res}{space 2}-7.682409{col 26}{space 2} .2324916{col 37}{space 1}  -33.04{col 46}{space 3}0.000{col 54}{space 4}-8.138084{col 67}{space 3}-7.226733
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}Normal       {txt}{c |}
+{space 8}sd(c){c |}{col 14}{res}{space 2} 3.800923{col 26}{space 2} .3038365{col 54}{space 4} 3.249721{col 67}{space 3} 4.445617
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}{res}1           {col 14}{txt}{c |}  (base alternative)
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}2            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0058322{col 26}{space 2} .0036865{col 37}{space 1}   -1.58{col 46}{space 3}0.114{col 54}{space 4}-.0130577{col 67}{space 3} .0013933
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-.8990062{col 26}{space 2} .1108781{col 37}{space 1}   -8.11{col 46}{space 3}0.000{col 54}{space 4}-1.116323{col 67}{space 3}-.6816892
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}3            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}  .020762{col 26}{space 2}  .004655{col 37}{space 1}    4.46{col 46}{space 3}0.000{col 54}{space 4} .0116383{col 67}{space 3} .0298857
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .3657732{col 26}{space 2} .2056176{col 37}{space 1}    1.78{col 46}{space 3}0.075{col 54}{space 4}-.0372298{col 67}{space 3} .7687763
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}4            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}  .002387{col 26}{space 2} .0034768{col 37}{space 1}    0.69{col 46}{space 3}0.492{col 54}{space 4}-.0044274{col 67}{space 3} .0092015
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.042462{col 26}{space 2} .1133201{col 37}{space 1}  -18.02{col 46}{space 3}0.000{col 54}{space 4}-2.264566{col 67}{space 3}-1.820359
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}5            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0045297{col 26}{space 2} .0046257{col 37}{space 1}   -0.98{col 46}{space 3}0.327{col 54}{space 4}-.0135959{col 67}{space 3} .0045364
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-3.429965{col 26}{space 2} .1567892{col 37}{space 1}  -21.88{col 46}{space 3}0.000{col 54}{space 4}-3.737266{col 67}{space 3}-3.122664
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}6            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0326799{col 26}{space 2} .0049492{col 37}{space 1}    6.60{col 46}{space 3}0.000{col 54}{space 4} .0229796{col 67}{space 3} .0423802
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2.508699{col 26}{space 2} .2233818{col 37}{space 1}  -11.23{col 46}{space 3}0.000{col 54}{space 4} -2.94652{col 67}{space 3}-2.070879
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}7            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2}-.0058333{col 26}{space 2} .0047736{col 37}{space 1}   -1.22{col 46}{space 3}0.222{col 54}{space 4}-.0151894{col 67}{space 3} .0035227
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4157664{col 26}{space 2} .1529337{col 37}{space 1}    2.72{col 46}{space 3}0.007{col 54}{space 4} .1160218{col 67}{space 3}  .715511
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}8            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0298916{col 26}{space 2} .0047549{col 37}{space 1}    6.29{col 46}{space 3}0.000{col 54}{space 4} .0205722{col 67}{space 3}  .039211
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0940732{col 26}{space 2} .2329927{col 37}{space 1}    0.40{col 46}{space 3}0.686{col 54}{space 4}-.3625841{col 67}{space 3} .5507305
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}9            {txt}{c |}
+{space 6}income {c |}{col 14}{res}{space 2} .0266457{col 26}{space 2} .0052373{col 37}{space 1}    5.09{col 46}{space 3}0.000{col 54}{space 4} .0163808{col 67}{space 3} .0369106
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .6893077{col 26}{space 2} .2824188{col 37}{space 1}    2.44{col 46}{space 3}0.015{col 54}{space 4} .1357771{col 67}{space 3} 1.242838
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+LR test vs. fixed parameters: {help j_chibar##|_new:chibar2(01) =} {res}  138.35{txt}{col 55}Prob >= chibar2 = {res}{col 73}0.0000
+{txt}
+{com}. *store estimation (of partial alternative)
+. est sto partial
+{txt}
+{com}. 
+. *do hauman test for IIA property
+. hausman partial all, alleqs constant
+
+{txt}{col 18}{hline 4} Coefficients {hline 4}
+{col 14}{c |}{col 21}(b){col 34}(B){col 49}(b-B){col 59}sqrt(diag(V_b-V_B))
+{col 14}{c |}{col 17}  partial   {col 30}    all     {col 46}Difference{col 66}S.E.
+{hline 13}{c +}{hline 64}
+{res}price{col 14}{txt}{c |}
+{space 11}c {c |}{res}{col 18}-7.682409{col 31}-7.547198{col 47}-.1352107{col 63} .0679025
+{txt}{hline 13}{c +}{hline 64}
+{res}Normal{col 14}{txt}{c |}
+{space 8}sd(c){c |}{res}{col 18} 3.800923{col 31} 3.649194{col 47} .1517296{col 63} .0843891
+{txt}{hline 13}{c +}{hline 64}
+{res}2{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18}-.0058322{col 31}-.0058937{col 47} .0000615{col 63} .0002985
+{txt}{space 7}_cons {c |}{res}{col 18}-.8990062{col 31}-.8886583{col 47}-.0103479{col 63} .0096209
+{txt}{hline 13}{c +}{hline 64}
+{res}3{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18}  .020762{col 31} .0202033{col 47} .0005587{col 63} .0007001
+{txt}{space 7}_cons {c |}{res}{col 18} .3657732{col 31} .3624811{col 47} .0032921{col 63} .0345555
+{txt}{hline 13}{c +}{hline 64}
+{res}4{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18}  .002387{col 31} .0025691{col 47}-.0001821{col 63} .0002748
+{txt}{space 7}_cons {c |}{res}{col 18}-2.042462{col 31}-2.025266{col 47}-.0171966{col 63} .0123948
+{txt}{hline 13}{c +}{hline 64}
+{res}5{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18}-.0045297{col 31} -.003862{col 47}-.0006678{col 63} .0006098
+{txt}{space 7}_cons {c |}{res}{col 18}-3.429965{col 31}-3.383501{col 47}-.0464637{col 63} .0291619
+{txt}{hline 13}{c +}{hline 64}
+{res}6{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18} .0326799{col 31} .0324638{col 47} .0002161{col 63} .0003535
+{txt}{space 7}_cons {c |}{res}{col 18}-2.508699{col 31}-2.521205{col 47} .0125056{col 63} .0152798
+{txt}{hline 13}{c +}{hline 64}
+{res}7{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18}-.0058333{col 31}-.0061804{col 47}  .000347{col 63} .0003094
+{txt}{space 7}_cons {c |}{res}{col 18} .4157664{col 31} .4032682{col 47} .0124982{col 63} .0162333
+{txt}{hline 13}{c +}{hline 64}
+{res}8{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18} .0298916{col 31} .0292799{col 47} .0006117{col 63} .0008009
+{txt}{space 7}_cons {c |}{res}{col 18} .0940732{col 31} .0961353{col 47}-.0020621{col 63} .0414118
+{txt}{hline 13}{c +}{hline 64}
+{res}9{col 14}{txt}{c |}
+{space 6}income {c |}{res}{col 18} .0266457{col 31} .0258758{col 47} .0007698{col 63}  .000983
+{txt}{space 7}_cons {c |}{res}{col 18} .6893077{col 31} .7081915{col 47}-.0188837{col 63} .0557621
+{txt}{hline 13}{c BT}{hline 64}
+{ralign 78:b = consistent under Ho and Ha; obtained from asmixlogit}
+{ralign 78:B = inconsistent under Ha, efficient under Ho; obtained from asmixlogit}
+
+    Test:  Ho:  difference in coefficients not systematic
+
+{ralign 25:chi2({res:18})} = (b-B)'[(V_b-V_B)^(-1)](b-B)
+{col 27}=  {res}      5.59
+{txt}{col 17}Prob>chi2 =  {res}    0.9976
+{txt}{col 17}(V_b-V_B is not positive definite)
+
+{com}. 
+. **===========================================================
+. **HW4
+. **===========================================================
+. **Exercise 1
+. clear
+{txt}
+{com}. insheet using /Users/killshadows/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/4/Koop-Tobias.csv
+{txt}(10 vars, 17,919 obs)
+
+{com}. *convert data into panel data
+. xtset personid timetrnd
+{res}{txt}{col 8}panel variable:  {res}personid (unbalanced)
+{txt}{col 9}time variable:  {res}{col 25}timetrnd, 0 to 14, but with gaps
+{txt}{col 17}delta:  {res}1 unit
+{txt}
+{com}. bysort personid: gen t = _n
+{txt}
+{com}. *draw plots of 5 random individuals' panel dimension
+. plot logwage timetrnd if personid == 5
+{res}
+    2.56 {txt}+  
+         |                                                                 *
+         |  
+         |  
+         |  
+         |  
+         |  
+    {res}L    {txt}|  
+    {res}O    {txt}|  
+    {res}G    {txt}|                                           *
+    {res}W    {txt}|  
+    {res}A    {txt}|  
+    {res}G    {txt}|  
+    {res}E    {txt}|  
+         |  
+         |  
+         |  
+         |  
+         |  
+         |  
+{res}    2.41 {txt}+ *
+          +----------------------------------------------------------------+
+         {res}       3                    TIMETRND                           6
+
+{txt}
+{com}. plot logwage timetrnd if personid == 15
+{res}
+    3.22 {txt}+  
+         |  
+         |                                                          *      *
+         |  
+         |  
+         |  
+         |  
+    {res}L    {txt}|                                                    *
+    {res}O    {txt}|  
+    {res}G    {txt}|  
+    {res}W    {txt}|  
+    {res}A    {txt}|                                             *
+    {res}G    {txt}|  
+    {res}E    {txt}|                                       *
+         |  
+         |  
+         |                                 *
+         |  
+         |       *     *
+         |                          *
+{res}    2.11 {txt}+ *                  *
+          +----------------------------------------------------------------+
+         {res}       4                    TIMETRND                          14
+
+{txt}
+{com}. plot logwage timetrnd if personid == 115
+{res}
+    2.96 {txt}+  
+         |                                                                *
+         |  
+         |                                           *
+         |  
+         |                                      *
+         |                                                           *
+    {res}L    {txt}|                                                 *
+    {res}O    {txt}|                                 *                    *
+    {res}G    {txt}|                           *
+    {res}W    {txt}|  
+    {res}A    {txt}|                      *
+    {res}G    {txt}|           *
+    {res}E    {txt}|  
+         |  
+         |  
+         |  
+         |  
+         |                *
+         |      *
+{res}    1.81 {txt}+ *
+          +----------------------------------------------------------------+
+         {res}       2                    TIMETRND                          14
+
+{txt}
+{com}. plot logwage timetrnd if personid == 1115
+{res}
+    2.39 {txt}+  
+         |                                                           *
+         |  
+         |  
+         |  
+         |  
+         |                                      *               *
+    {res}L    {txt}|                                                                *
+    {res}O    {txt}|  
+    {res}G    {txt}|  
+    {res}W    {txt}|                                                 *
+    {res}A    {txt}|  
+    {res}G    {txt}|                      *                    *
+    {res}E    {txt}| *         *    *
+         |  
+         |  
+         |  
+         |  
+         |  
+         |  
+{res}    1.32 {txt}+      *
+          +----------------------------------------------------------------+
+         {res}       2                    TIMETRND                          14
+
+{txt}
+{com}. plot logwage timetrnd if personid == 1555
+{res}
+    3.26 {txt}+  
+         |                                                   *
+         |  
+         |                                 *
+         |                                          *
+         |  
+         |                       *             *                 *    *
+    {res}L    {txt}|                                              *                  *
+    {res}O    {txt}|          *        *
+    {res}G    {txt}|              *             *
+    {res}W    {txt}|  
+    {res}A    {txt}|  
+    {res}G    {txt}|  
+    {res}E    {txt}|  
+         |  
+         |     *
+         |  
+         |  
+         |  
+         |  
+{res}    2.01 {txt}+ *
+          +----------------------------------------------------------------+
+         {res}       0                    TIMETRND                          14
+
+{txt}
+{com}. 
+. **Exercise 2
+. *do random effet model
+. xtreg logwage educ potexper, re
+{res}
+{txt}Random-effects GLS regression                   Number of obs     = {res}    17,919
+{txt}Group variable: {res}personid                        {txt}Number of groups  = {res}     2,178
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1961                                         {txt}min = {res}         1
+{txt}     between = {res}0.1533                                         {txt}avg = {res}       8.2
+{txt}     overall = {res}0.1578                                         {txt}max = {res}        15
+
+                                                {txt}Wald chi2({res}2{txt})      =  {res}  4209.96
+{txt}corr(u_i, X)   = {res}0{txt} (assumed)                    Prob > chi2       =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2}  .107938{col 26}{space 2} .0033832{col 37}{space 1}   31.90{col 46}{space 3}0.000{col 54}{space 4} .1013071{col 67}{space 3}  .114569
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0387645{col 26}{space 2} .0007178{col 37}{space 1}   54.00{col 46}{space 3}0.000{col 54}{space 4} .0373576{col 67}{space 3} .0401714
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .5635206{col 26}{space 2} .0438846{col 37}{space 1}   12.84{col 46}{space 3}0.000{col 54}{space 4} .4775083{col 67}{space 3} .6495328
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .37207276
+     {txt}sigma_e {c |} {res} .33545728
+         {txt}rho {c |} {res}  .5516129{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+
+{com}. 
+. **Exercise 3
+. *do fixed effect model
+. *between estimator
+. xtreg logwage educ potexper,be
+
+{txt}Between regression (regression on group means)  Number of obs     = {res}    17,919
+{txt}Group variable: {res}personid                        {txt}Number of groups  = {res}     2,178
+
+{txt}R-sq:                                           Obs per group:
+     within  = {res}0.1962                                         {txt}min = {res}         1
+{txt}     between = {res}0.1553                                         {txt}avg = {res}       8.2
+{txt}     overall = {res}0.1518                                         {txt}max = {res}        15
+
+                                                {txt}F({res}2{txt},{res}2175{txt})         =  {res}   200.01
+{txt}sd(u_i + avg(e_i.))= {res} .3991313                  {txt}Prob > F          =     {res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2} .0930999{col 26}{space 2} .0046685{col 37}{space 1}   19.94{col 46}{space 3}0.000{col 54}{space 4} .0839447{col 67}{space 3} .1022551
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0259987{col 26}{space 2} .0036049{col 37}{space 1}    7.21{col 46}{space 3}0.000{col 54}{space 4} .0189294{col 67}{space 3} .0330681
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .8455688{col 26}{space 2} .0770179{col 37}{space 1}   10.98{col 46}{space 3}0.000{col 54}{space 4} .6945324{col 67}{space 3} .9966052
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+
+{com}. 
+. *within estimator
+. xtreg logwage educ potexper,fe
+{res}
+{txt}Fixed-effects (within) regression{col 49}Number of obs{col 67}={col 69}{res}    17,919
+{txt}Group variable: {res}personid{txt}{col 49}Number of groups{col 67}={col 69}{res}     2,178
+
+{txt}R-sq:{col 49}Obs per group:
+     within  = {res}0.1964{col 63}{txt}min{col 67}={col 69}{res}         1
+{txt}     between = {res}0.1550{col 63}{txt}avg{col 67}={col 69}{res}       8.2
+{txt}     overall = {res}0.1551{col 63}{txt}max{col 67}={col 69}{res}        15
+
+{txt}{col 49}F({res}2{txt},{res}15739{txt}){col 67}={col 70}{res}  1923.47
+{txt}corr(u_i, Xb){col 16}= {res}-0.1273{txt}{col 49}Prob > F{col 67}={col 73}{res}0.0000
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}     logwage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 8}educ {c |}{col 14}{res}{space 2}  .123662{col 26}{space 2} .0057619{col 37}{space 1}   21.46{col 46}{space 3}0.000{col 54}{space 4} .1123681{col 67}{space 3} .1349559
+{txt}{space 4}potexper {c |}{col 14}{res}{space 2} .0385611{col 26}{space 2} .0007585{col 37}{space 1}   50.84{col 46}{space 3}0.000{col 54}{space 4} .0370744{col 67}{space 3} .0400478
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .4068016{col 26}{space 2} .0717348{col 37}{space 1}    5.67{col 46}{space 3}0.000{col 54}{space 4} .2661931{col 67}{space 3}   .54741
+{txt}{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+     sigma_u {c |} {res} .40290853
+     {txt}sigma_e {c |} {res} .33545728
+         {txt}rho {c |} {res} .59059603{txt}   (fraction of variance due to u_i)
+{hline 13}{c BT}{hline 64}
+F test that all u_i=0: F({res}2177{txt}, {res}15739{txt}) = {res}9.95{col 62}{txt}Prob > F = {res}0.0000
+{txt}
+{com}. 
+. *first time difference estimator
+. gen d_wage = logwage - logwage[_n-1]
+{txt}(1 missing value generated)
+
+{com}. gen d_id = personid - personid[_n-1]
+{txt}(1 missing value generated)
+
+{com}. gen d_edu = educ - educ[_n-1]
+{txt}(1 missing value generated)
+
+{com}. gen d_exp = potexper - potexper[_n-1]
+{txt}(1 missing value generated)
+
+{com}. drop if d_id == 1
+{txt}(2,177 observations deleted)
+
+{com}. drop if d_id == .
+{txt}(1 observation deleted)
+
+{com}. reg d_wage d_edu d_exp
+
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}    15,741
+{txt}{hline 13}{c +}{hline 34}   F(2, 15738)     = {res}    11.50
+{txt}       Model {c |} {res}  3.2930869         2  1.64654345   {txt}Prob > F        ={res}    0.0000
+{txt}    Residual {c |} {res} 2252.70337    15,738  .143137843   {txt}R-squared       ={res}    0.0015
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0013
+{txt}       Total {c |} {res} 2255.99645    15,740  .143328873   {txt}Root MSE        =   {res} .37834
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}      d_wage{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 7}d_edu {c |}{col 14}{res}{space 2} .0383523{col 26}{space 2} .0081414{col 37}{space 1}    4.71{col 46}{space 3}0.000{col 54}{space 4} .0223942{col 67}{space 3} .0543104
+{txt}{space 7}d_exp {c |}{col 14}{res}{space 2} .0039891{col 26}{space 2} .0038866{col 37}{space 1}    1.03{col 46}{space 3}0.305{col 54}{space 4}-.0036291{col 67}{space 3} .0116072
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .0494644{col 26}{space 2}  .005536{col 37}{space 1}    8.94{col 46}{space 3}0.000{col 54}{space 4} .0386132{col 67}{space 3} .0603155
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. 
