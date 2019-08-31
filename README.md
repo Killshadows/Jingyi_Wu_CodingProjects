@@ -1,7 +1,7 @@
 # Coding Projects of Jingyi Wu
 Class Projects at Duke
 
-# Econ613: Applied Econometrics 
+% Econ613: Applied Econometrics 
   - Data Manipulation
   - OLS and Discrete Choices
   - Multinomial Model
