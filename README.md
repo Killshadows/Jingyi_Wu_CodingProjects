@@ -2,7 +2,7 @@
 Class Projects at Duke
 
 - Econ613: Applied Econometrics 
-  *Data Manipulation
+  -Data Manipulation
   *OLS and Discrete Choices
   *Multinomial Model
   *Linear Panel Data
