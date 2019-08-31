@@ -1,6 +1,5 @@
 # Coding Projects of Jingyi Wu
-Course Projects at Duke
-Tags: R language, MATLAB, Stata
+Course Projects at Duke, Language used: R, MATLAB, Stata
 
 - Econ613: Applied Econometrics 
   - Data Manipulation
