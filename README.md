@@ -1,7 +1,7 @@
 # Coding Projects of Jingyi Wu
 Class Projects at Duke
 
-% Econ613: Applied Econometrics 
+- Econ613: Applied Econometrics 
   - Data Manipulation
   - OLS and Discrete Choices
   - Multinomial Model
@@ -9,7 +9,7 @@ Class Projects at Duke
   - Redo using Stata...
   
 
-# Econ623: Financial Market Forecasting
+- Econ623: Financial Market Forecasting
   - ARMA process
   - Testing (JB, MZ, DM, etc.)
   - Volatility forecasting (GARCH, etc.)
