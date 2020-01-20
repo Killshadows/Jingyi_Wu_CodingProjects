@@ -1,3 +1,7 @@
+#Author: Jingyi Wu
+#Date modified: Jan 2020
+
+#read data
 dat = read.csv("~/Desktop/DUKE/COURSES/SPRING2019/ECON613/Assignments/4/Koop-Tobias.csv")
 
 #=========================================================================
